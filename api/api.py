@@ -46,7 +46,7 @@ def get_all_users():
     return jsonify({'users': output})
 
 @app.route('/user/<public_id>', methods=['GET'])
-def get_user():
+def get_user(public_id):
 
     user = User.query.filter_by(public_id=public_id).first()
 
@@ -75,11 +75,11 @@ def create_user():
     return jsonify({'message': 'New User Created!'})
 
 @app.route('/user/<public_id>', methods=['PUT'])
-def promote_user_to_admin():
+def promote_user_to_admin(public_id):
     return ''
 
 @app.route('/user/<public_id>', methods=['DELETE'])
-def delete_user():
+def delete_user(public_id):
     return ''
 
 if __name__ == '__main__':
