@@ -89,7 +89,16 @@ def promote_user_to_admin(public_id):
 
 @app.route('/user/<public_id>', methods=['DELETE'])
 def delete_user(public_id):
-    return ''
+    
+    user = User.query.filter_by(public_id=public_id).first()
+
+    if not user:
+        return jsonify({'message': 'No user found!'})
+
+    db.session.delete(user)
+    db.session.commit()
+
+    return jsonify({'message': 'User Deleted!'})
 
 if __name__ == '__main__':
     app.run()
