@@ -1,8 +1,9 @@
-import time, os
-from flask import Flask
+import time, os, uuid
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv()
 
@@ -25,6 +26,35 @@ class User(db.Model):
 @app.route('/time')
 def get_current_time():
     return {'time': time.time()}
+
+@app.route('/user', methods=['GET'])
+def get_all_users():
+    return ''
+
+@app.route('/user/<user_id>', methods=['GET'])
+def get_user():
+    return ''
+
+@app.route('/user', methods=['POST'])
+def create_user():
+    data = request.get_json()
+
+    hashed_password = generate_password_hash(data['password'], method='sha256')
+
+    new_user = User(public_id=str(uuid.uuid4()), name=data['name'], password=hashed_password, admin=False)
+
+    db.session.add(new_user)
+    db.sessions.commit()
+
+    return jsonify({'message': 'New User Created!'})
+
+@app.route('/user/<user_id>', methods=['PUT'])
+def promote_user_to_admin():
+    return ''
+
+@app.route('/user/<user_id>', methods=['DELETE'])
+def delete_user():
+    return ''
 
 if __name__ == '__main__':
     app.run()
