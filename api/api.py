@@ -41,7 +41,7 @@ def get_all_users():
         user_data['password'] = user.password
         user_data['admin'] = user.admin
 
-        output.apped(user_data)
+        output.append(user_data)
 
     return jsonify({'users': output})
 
