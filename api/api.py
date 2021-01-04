@@ -45,9 +45,21 @@ def get_all_users():
 
     return jsonify({'users': output})
 
-@app.route('/user/<user_id>', methods=['GET'])
+@app.route('/user/<public_id>', methods=['GET'])
 def get_user():
-    return ''
+
+    user = User.query.filter_by(public_id=public_id).first()
+
+    if not user:
+        return jsonify({'message': 'No user found!'})
+
+    user_data = {}
+    user_data['public_id'] = user.public_id
+    user_data['name'] = user.name
+    user_data['password'] = user.password
+    user_data['admin'] = user.admin
+
+    return user_data
 
 @app.route('/user', methods=['POST'])
 def create_user():
@@ -62,11 +74,11 @@ def create_user():
 
     return jsonify({'message': 'New User Created!'})
 
-@app.route('/user/<user_id>', methods=['PUT'])
+@app.route('/user/<public_id>', methods=['PUT'])
 def promote_user_to_admin():
     return ''
 
-@app.route('/user/<user_id>', methods=['DELETE'])
+@app.route('/user/<public_id>', methods=['DELETE'])
 def delete_user():
     return ''
 
