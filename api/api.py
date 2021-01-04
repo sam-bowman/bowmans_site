@@ -36,9 +36,11 @@ def token_required(f):
 
         try:
             print('entering check for token validity')
-            data = jwt.decode(token, app.config['SECRET_KEY'])
             print('secret key:')
             print(app.config['SECRET_KEY'])
+            print('token:')
+            print(token)
+            data = jwt.decode(token, app.config['SECRET_KEY'])
             print('data:')
             print(data)
             current_user = User.query.filter_by(public_id=data['public_id']).first()
