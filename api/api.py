@@ -40,7 +40,7 @@ def token_required(f):
             print(app.config['SECRET_KEY'])
             print('token:')
             print(token)
-            data = jwt.decode(token, app.config['SECRET_KEY'], algorithm="HS256")
+            data = jwt.decode(token, app.config['SECRET_KEY'], algorithms=["HS256"])
             print('data:')
             print(data)
             current_user = User.query.filter_by(public_id=data['public_id']).first()
@@ -160,7 +160,7 @@ def login():
     if check_password_hash(user.password, auth.password):
         token = jwt.encode({'public_id' : user.public_id, 'exp' : datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'], algorithm="HS256")
 
-        return jsonify({'token' : jwt.decode(token, app.config['SECRET_KEY'])}, algorithm="HS256")
+        return jsonify({'token' : jwt.decode(token, app.config['SECRET_KEY'])}, algorithms=["HS256"])
 
     return make_response('Could not verify', 401, {'WWW-Authenticate' : 'Basic realm="Login required!"'})
     
