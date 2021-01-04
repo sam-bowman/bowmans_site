@@ -27,6 +27,7 @@ def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         token = None
+
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
 
@@ -35,7 +36,7 @@ def token_required(f):
 
         try:
             data = jwt.decode(token, app.config['SECRET_KEY'])
-            current_user = User.query.filter_by(public_id=data['public_id'].first())
+            current_user = User.query.filter_by(public_id=data['public_id']).first()
         except:
             return jsonify({'message': 'Token is invalid'}), 401
 
@@ -150,6 +151,7 @@ def login():
 
     if check_password_hash(user.password, auth.password):
         token = jwt.encode({'public_id':user.public_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, app.config['SECRET_KEY'])
+        print(app.config['SECRET_KEY'])
         return jsonify({'token': token})
 
     return make_response('Could not verify', 401, {'WWW-Authenticate': 'Basic Realm="Login Required!"'})
